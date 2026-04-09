@@ -1,15 +1,3 @@
-# SimCLR-Style Representation Learning on CIFAR-10
+# SimCLR-Style Self-Supervised Learning on CIFAR-10
 
-This project implements a SimCLR-style self-supervised learning pipeline in PyTorch.
-
-## What it does
-- Uses a ResNet-18 encoder with a projection head
-- Applies image augmentations to create positive pairs
-- Trains with a contrastive learning objective
-- Evaluates learned representations on CIFAR-10 using k-NN
-
-## Tech Stack
-PyTorch, torchvision, Python, Jupyter Notebook
-
-## Notes
-This is a personal implementation for learning self-supervised and contrastive representation learning.
+This project is a PyTorch implementation of a SimCLR-style self-supervised learning pipeline on CIFAR-10. It uses a ResNet-18 encoder with a projection head, applies image augmentations to construct positive pairs, and trains the model with alignment and uniformity loss. The learned representations are evaluated with k-NN classification.
