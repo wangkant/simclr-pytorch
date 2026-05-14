@@ -1,0 +1,24 @@
+# Datasets (downloaded at runtime by torchvision)
+datasets/
+data/
+*.tar.gz
+
+# Model checkpoints
+*.pth
+*.pt
+*.ckpt
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
