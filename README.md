@@ -1,33 +1,47 @@
 # SimCLR on CIFAR-10 (PyTorch)
 
-A PyTorch implementation of [SimCLR](https://arxiv.org/abs/2002.05709)-style self-supervised learning on the CIFAR-10 dataset. The model learns visual representations without labels, which are then evaluated with k-NN classification.
+A PyTorch implementation of [SimCLR](https://arxiv.org/abs/2002.05709)-style self-supervised contrastive learning on the CIFAR-10 dataset. The model learns visual representations without any labels, then a frozen-feature k-NN classifier measures how useful those representations are downstream.
 
 ## Approach
 
-- **Encoder**: ResNet-18 backbone
-- **Projection Head**: MLP that maps representations to the contrastive space
-- **Augmentations**: Random crop, color jitter, grayscale, Gaussian blur
-- **Loss**: Alignment + uniformity objectives for contrastive learning
-- **Evaluation**: k-NN classifier on frozen representations
+| Component | Choice |
+|---|---|
+| **Encoder** | ResNet-18 backbone |
+| **Projection head** | MLP into the contrastive embedding space |
+| **Augmentations** | RandomResizedCrop, ColorJitter, RandomGrayscale, GaussianBlur, RandomHorizontalFlip |
+| **Objective** | Alignment + uniformity (Wang & Isola formulation), equivalent to InfoNCE up to constants |
+| **Evaluation** | k-NN over frozen encoder features on CIFAR-10 test set |
 
-## Tech Stack
+The split between alignment (pulling positive pairs together) and uniformity (spreading the feature distribution over the unit sphere) is more numerically stable for small-batch contrastive training than the temperature-scaled softmax variant of NT-Xent, and easier to debug — each component has its own loss curve.
 
-- PyTorch
-- torchvision
-- Jupyter Notebook
+## Setup
 
-## Usage
+```bash
+python -m venv .venv
+source .venv/bin/activate          # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+jupyter notebook SimCLR.ipynb      # or open in Colab
+```
 
-Open `SimCLR.ipynb` in Jupyter or Google Colab and run all cells. The notebook includes:
-1. Data loading and augmentation pipeline
-2. SimCLR model definition (encoder + projection head)
-3. Training loop with contrastive loss
-4. k-NN evaluation on learned embeddings
+GPU is not required but strongly recommended — training a useful encoder takes hundreds of epochs on CIFAR-10 even with a small batch.
 
-## Results
+## Notebook layout
 
-The learned representations achieve competitive k-NN accuracy on CIFAR-10 without any supervised training labels.
+`SimCLR.ipynb` is self-contained and runs end-to-end:
 
-## File Structure
+1. **Data loading & augmentation** — Two augmented views per image form positive pairs.
+2. **Model** — Encoder (ResNet-18, last FC dropped) + projection head.
+3. **Training** — Contrastive loss (alignment + uniformity) for *N* epochs.
+4. **Evaluation** — Freeze the encoder, build an embedding for each train and test image, run k-NN classification on the test set.
 
-- `SimCLR.ipynb` — Full implementation and training notebook
+All hyperparameters live in a single config cell at the top of the notebook (batch size, learning rate, temperature, epoch count, k for k-NN).
+
+## Files
+
+- `SimCLR.ipynb` — End-to-end notebook (training + evaluation).
+- `requirements.txt` — Pinned-version-free dependency list (`torch`, `torchvision`, `scikit-learn`).
+
+## References
+
+- Chen et al., *A Simple Framework for Contrastive Learning of Visual Representations* (SimCLR), [arXiv:2002.05709](https://arxiv.org/abs/2002.05709)
+- Wang & Isola, *Understanding Contrastive Representation Learning through Alignment and Uniformity on the Hypersphere*, [arXiv:2005.10242](https://arxiv.org/abs/2005.10242)
