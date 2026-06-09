@@ -8,7 +8,7 @@ A PyTorch implementation of [SimCLR](https://arxiv.org/abs/2002.05709)-style sel
 |---|---|
 | **Encoder** | ResNet-18 backbone |
 | **Projection head** | MLP into the contrastive embedding space |
-| **Augmentations** | RandomResizedCrop, ColorJitter, RandomGrayscale, GaussianBlur, RandomHorizontalFlip |
+| **Augmentations** | RandomResizedCrop, ColorJitter, RandomGrayscale, RandomHorizontalFlip (no Gaussian blur, the SimCLR paper skips it for small 32x32 images) |
 | **Objective** | Alignment + uniformity (Wang & Isola formulation) |
 | **Evaluation** | k-NN over frozen encoder features on the CIFAR-10 test set |
 
@@ -34,12 +34,12 @@ A GPU is not required but is strongly recommended, since training a useful encod
 3. **Training** - contrastive loss (alignment + uniformity) for *N* epochs.
 4. **Evaluation** - freeze the encoder, get an embedding for every train and test image, then run k-NN on the test set.
 
-All hyperparameters are in a single config cell at the top of the notebook (batch size, learning rate, temperature, epoch count, k for k-NN).
+The hyperparameters sit next to the code that uses them: batch size in the data-loading cell, the uniformity scale `t` in the loss cell, learning rate in the optimizer cell, epoch count in the training cell, and k in the k-NN cell.
 
 ## Files
 
 - `SimCLR.ipynb` - the notebook (training + evaluation).
-- `requirements.txt` - dependency list (`torch`, `torchvision`, `scikit-learn`).
+- `requirements.txt` - dependency list (`torch`, `torchvision`, `scikit-learn`, `notebook`).
 
 ## References
 
