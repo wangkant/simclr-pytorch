@@ -8,8 +8,8 @@ A PyTorch implementation of [SimCLR](https://arxiv.org/abs/2002.05709)-style sel
 |---|---|
 | **Encoder** | ResNet-18 backbone |
 | **Projection head** | MLP into the contrastive embedding space |
-| **Augmentations** | RandomResizedCrop, ColorJitter, RandomGrayscale, GaussianBlur, RandomHorizontalFlip |
-| **Objective** | Alignment + uniformity (Wang & Isola formulation), equivalent to InfoNCE up to constants |
+| **Augmentations** | RandomResizedCrop, ColorJitter, RandomGrayscale, RandomHorizontalFlip (Gaussian blur is intentionally omitted for 32x32 CIFAR images, per the SimCLR paper) |
+| **Objective** | Alignment + uniformity (Wang & Isola formulation), closely related to InfoNCE — Wang & Isola show InfoNCE asymptotically optimizes alignment and uniformity |
 | **Evaluation** | k-NN over frozen encoder features on CIFAR-10 test set |
 
 The split between alignment (pulling positive pairs together) and uniformity (spreading the feature distribution over the unit sphere) is more numerically stable for small-batch contrastive training than the temperature-scaled softmax variant of NT-Xent, and easier to debug — each component has its own loss curve.
@@ -34,12 +34,12 @@ GPU is not required but strongly recommended — training a useful encoder takes
 3. **Training** — Contrastive loss (alignment + uniformity) for *N* epochs.
 4. **Evaluation** — Freeze the encoder, build an embedding for each train and test image, run k-NN classification on the test set.
 
-All hyperparameters live in a single config cell at the top of the notebook (batch size, learning rate, temperature, epoch count, k for k-NN).
+Hyperparameters live next to the code they configure: batch size in the data-loading cell, the uniformity scale `t` in the loss cell, learning rate in the optimizer cell, epoch count in the training cell, and k in the k-NN evaluation cell.
 
 ## Files
 
 - `SimCLR.ipynb` — End-to-end notebook (training + evaluation).
-- `requirements.txt` — Pinned-version-free dependency list (`torch`, `torchvision`, `scikit-learn`).
+- `requirements.txt` — Pinned-version-free dependency list (`torch`, `torchvision`, `scikit-learn`, `notebook`).
 
 ## References
 
