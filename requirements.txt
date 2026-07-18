@@ -1,4 +1,9 @@
-torch
-torchvision
-scikit-learn
-notebook
+# Bounded versions known-compatible with the APIs used in SimCLR.ipynb
+# (torchvision transforms v1, torchvision.models.resnet18(), torch.pdist,
+# sklearn KNeighborsClassifier(metric="cosine")). pip resolves a matching
+# torch/torchvision pair within these ranges.
+torch>=2.0,<3.0
+torchvision>=0.15,<1.0
+numpy>=1.24,<3.0
+scikit-learn>=1.3,<2.0
+notebook>=7.0,<8.0
