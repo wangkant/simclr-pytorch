@@ -36,10 +36,20 @@ A GPU is not required but is strongly recommended, since training a useful encod
 
 The hyperparameters sit next to the code that uses them: batch size in the data-loading cell, the uniformity scale `t` in the loss cell, learning rate in the optimizer cell, epoch count in the training cell, and k in the k-NN cell.
 
+## Reproducibility
+
+There is a seed cell near the top that sets `SEED = 42` for `random`, NumPy and PyTorch (CPU and CUDA), so the shuffling and augmentation sampling repeat.
+
+This does not make GPU runs bit-exact though, since some CUDA kernels are nondeterministic. Getting full determinism would also need `torch.use_deterministic_algorithms(True)` and `cudnn.deterministic = True` / `benchmark = False`, which costs speed, so I left it off. Numbers can also shift a bit between torch/CUDA versions.
+
+## Current status
+
+The outputs saved in the notebook are from a partial run: training stopped after 2 of the 10 epochs and I never ran the k-NN cell, so there is no accuracy number committed yet. Still waiting on GPU time for a full run.
+
 ## Files
 
 - `SimCLR.ipynb` - the notebook (training + evaluation).
-- `requirements.txt` - dependency list (`torch`, `torchvision`, `scikit-learn`, `notebook`).
+- `requirements.txt` - dependencies with version bounds (`torch`, `torchvision`, `numpy`, `scikit-learn`, `notebook`).
 
 ## References
 
