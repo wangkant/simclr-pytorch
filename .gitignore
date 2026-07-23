@@ -7,6 +7,10 @@ data/
 *.pth
 *.pt
 *.ckpt
+checkpoints/
+
+# Run logs (training progress, download logs)
+run_logs/
 
 # Jupyter
 .ipynb_checkpoints/

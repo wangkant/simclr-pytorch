@@ -1,9 +1,12 @@
-# Bounded versions known-compatible with the APIs used in SimCLR.ipynb
-# (torchvision transforms v1, torchvision.models.resnet18(), torch.pdist,
-# sklearn KNeighborsClassifier(metric="cosine")). pip resolves a matching
-# torch/torchvision pair within these ranges.
-torch>=2.0,<3.0
-torchvision>=0.15,<1.0
-numpy>=1.24,<3.0
-scikit-learn>=1.3,<2.0
+# Versions used for the committed Tiny-ImageNet run (Python 3.10).
+#
+# torch/torchvision are pinned to a CUDA-12 wheel pair on purpose: an unpinned
+# `torch` currently resolves to a CUDA-13 build, which fails to initialise on
+# CUDA-12 drivers and silently falls back to CPU. The default PyPI wheels for the
+# pins below are CUDA 12.1 builds. For a different CUDA/CPU target, install from
+# the matching PyTorch index, e.g.:
+#   pip install torch==2.3.1 torchvision==0.18.1 --index-url https://download.pytorch.org/whl/cu121
+torch==2.3.1
+torchvision==0.18.1
+numpy>=1.24,<2.0
 notebook>=7.0,<8.0
